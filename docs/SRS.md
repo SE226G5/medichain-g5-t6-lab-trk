@@ -88,7 +88,7 @@ Data Exchange: A structured JSON output containing raw results, reference ranges
 * **Instruction:** Sample Status & Lifecycle Management
 ​These endpoints handle the tracking and progression of medical samples.
 ​PATCH /api/v1/samples/:id/status: Updates the current status of a sample (e.g., from "Pending" to "In Progress").
-​POST /api/v1/samples/:id/ready: The primary integration point that notifies external modules (like Module 7) that the sample has finished laboratory review and is "Ready for Approval".
+​POST /api/v1/samples/ready-for-apprval: The primary integration point that notifies external modules (like Module 7) that the sample has finished laboratory review and is "Ready for Approval".
 ​GET /api/v1/samples/:id/history: Retrieves the audit trail and automated time-tracking logs for a specific sample's lifecycle.
 ​2. Laboratory Results & Data Exchange
 ​These endpoints manage the raw medical data requested by the integration teams.
@@ -114,11 +114,7 @@ Data Exchange: A structured JSON output containing raw results, reference ranges
   ],
   "timestamp": "ISO8601_DateTime"
 }
-| Interface | Description | Purpose |
-| :--- | :--- | :--- |
-| Module 3 API | Material Status Check | To confirm reagents are available before analysis. |
-| Module 5 API | Payment Verification | To ensure results are only released after billing. |
-| Module 7 API | Result Handover | To trigger the medical review process once tracking is done. |
+
 ### 3.2 System Features & User Stories
 
 #### 3.2.1 Feature: Sample Intake and Tracking
