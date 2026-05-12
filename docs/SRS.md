@@ -47,69 +47,140 @@ The purpose of this document is to define the functional and non-functional requ
 
 ## 2. Overall Description
 ### 2.1 Product Perspective
-* **Instruction:** Explain how your software fits into the bigger picture. 
-  * **For Subsystem Teams:** State clearly that your module is a component of a larger system. How does it interact with the master database or other modules?
-  * **For the Integration Team:** Provide the high-level block diagram showing all subsystems and their connection points.
-
-*   **2.1.1 System Interfaces:** [List the exact integration points and APIs your module exposes to, or consumes from, other teams].
-*   **2.1.2 User Interfaces:** [Describe the logical characteristics of your UI. Are you following a shared design system?].
-*   **2.1.3 Hardware Interfaces:** [List any required hardware, e.g., barcode scanners for labs, or state "None"].
-*   **2.1.4 Software Interfaces:** [Specify OS requirements, database dependencies, or third-party libraries].
-*   **2.1.5 Communications Interfaces:** [Define networking protocols used, e.g., HTTP/REST, WebSockets].
-*   **2.1.6 Memory & Operational Constraints:** [State minimum RAM, storage, and normal operating assumptions].
+  * **For Subsystem Teams:** The LAB-TRK module is a core component of the larger Medichain ecosystem. It functions as a specialized unit that interacts with the master database to ensure synchronization of patient records and test results, while exchanging data with other modules to maintain a seamless clinical workflow
+  * **For the Integration Team:** The high-level block diagram (located in the project folder) illustrates the interconnections between LAB-TRK and other subsystems, showing all integration points and data flow paths.
+*   **2.1.1 System Interfaces:** The module exposes a RESTful API that enables other teams (such as Module 7) to access specific functionalities:
+Status Notification: An endpoint to inform integrated modules when a sample is "Ready for Approval".
+Data Exchange: A structured JSON output containing raw results, reference ranges, and the lab technician's information.
+*   **2.1.2 User Interfaces:** web-based and follows the shared Medichain design language to ensure a consistent user experience. It is optimized for efficient sample entry and status monitoring via a dedicated dashboard.
+*   **2.1.3 Hardware Interfaces:**​Barcode Scanners: Integrated support for scanning devices to accelerate sample intake and tracking within the lab.
+​Label Printers: Compatibility with specialized laboratory printers for accurate sample identification
+*   **2.1.4 Software Interfaces:** Operating System: Compatible with both Windows and Linux server environments.
+​Database: Integration with the central system database for storing lab records and analytical results.
+*   **2.1.5 Communications Interfaces:** The system utilizes HTTP/HTTPS protocols for all REST API communications. Data transfer is secured to maintain the confidentiality and integrity of medical information exchanged between modules.
+*   **2.1.6 Memory & Operational Constraints:** ​Minimum RAM: 8 GB for the server environment to handle concurrent sample tracking and database operations.
+​Storage: At least 20 GB of available disk space for the application and the growing database of medical records.
+​Uptime: The system must be operational 24/7 to support laboratory shifts, with daily automated backups.
 
 ### 2.2 Product Functions
-* **Instruction:** Provide a high-level, bulleted summary of the major functions your software performs. Do not go into deep detail here (save it for Section 3).
+* **Instruction:** Sample Lifecycle Tracking: Monitoring the progression of medical samples from laboratory intake until results are ready for approval.
+​Status Management: Automating updates for sample statuses, including "In Progress" and "Ready for Approval" notifications for other modules.
+​Medical Data Handling: Managing the input and storage of raw test results and reference ranges without report generation.
+​Data Integration (API): Exposing raw results, reference values, and technician names to other modules via secure endpoints.
+​Security & Integrity: Implementing record-locking mechanisms and automated time-tracking for every laboratory action to ensure data accuracy.
 
 ### 2.3 User Characteristics
-* **Instruction:** Who will use your specific module? (e.g., Lab Technicians, Doctors, System Admins). Describe their technical expertise level.
+* **Instruction:** Lab Technicians: Primary users responsible for data entry and sample processing; they possess technical medical knowledge but require an intuitive, functional interface.
+​System Administrators: Technical experts who manage system configurations, user permissions, and database maintenance.
+​Integration Developers: Users from other subsystem teams who interact with the module through API documentation to facilitate system-wide communication.
 
 ### 2.4 Constraints, Assumptions, and Dependencies
-* **Instruction:** List any factors that limit your development (e.g., medical data privacy laws, reliance on another team finishing their API first, specific coding languages mandated).
-
+* **Instruction:** Dependencies: The full functionality of the notification system depends on other Medichain modules (like Module 7) finishing their respective API integration points.
+​Assumptions: It is assumed that all lab technicians have basic computer literacy and that the central Medichain server maintains a stable network connection.
+​Constraints: The development is restricted to using specific technologies, primarily JavaScript for the back-end and PostgreSQL for data storage, to maintain consistency across the project.
+​Compliance: All data handling must comply with standard medical privacy protocols as defined in the master project requirements.
 ---
 
 ## 3. Specific Requirements (Agile Approach)
 * **Instruction:** This section translates traditional functional requirements into Agile User Stories. Every feature must be traceable to the project management board.
 
 ### 3.1 External Interface Requirements
-* **Instruction:** Detail the exact data formats, API endpoints, and UI layouts needed for the interfaces mentioned in section 2.1.
-
+* **Instruction:** Sample Status & Lifecycle Management
+​These endpoints handle the tracking and progression of medical samples.
+​PATCH /api/v1/samples/:id/status: Updates the current status of a sample (e.g., from "Pending" to "In Progress").
+​POST /api/v1/samples/:id/ready: The primary integration point that notifies external modules (like Module 7) that the sample has finished laboratory review and is "Ready for Approval".
+​GET /api/v1/samples/:id/history: Retrieves the audit trail and automated time-tracking logs for a specific sample's lifecycle.
+​2. Laboratory Results & Data Exchange
+​These endpoints manage the raw medical data requested by the integration teams.
+​POST /api/v1/samples/:id/results: Allows lab technicians to submit raw test results, reference ranges, and technician identification.
+​GET /api/v1/samples/:id/results: Provides the structured JSON data (Raw Results, Reference Values, and Technician Name) to authorized external modules.
+​PUT /api/v1/samples/:id/results: Used for editing existing results; this endpoint triggers the Record Locking mechanism to prevent concurrent modification errors.
+​3. Administrative & System Monitoring
+​Endpoints for system-wide visibility and technician management.
+​GET /api/v1/samples: Returns a comprehensive list of all samples currently in the system and their real-time statuses.
+​GET /api/v1/technicians/activities: Provides administrators with logs of technician actions for security and performance auditing.
+​Standard Data Format (JSON)
+{
+  "sample_id": "string",
+  "status": "ready_for_approval",
+  "lab_technician": "string",
+  "results": [
+    {
+      "test_name": "string",
+      "raw_result": "string",
+      "reference_range": "string",
+      "unit": "string"
+    }
+  ],
+  "timestamp": "ISO8601_DateTime"
+}
+| Interface | Description | Purpose |
+| :--- | :--- | :--- |
+| Module 3 API | Material Status Check | To confirm reagents are available before analysis. |
+| Module 5 API | Payment Verification | To ensure results are only released after billing. |
+| Module 7 API | Result Handover | To trigger the medical review process once tracking is done. |
 ### 3.2 System Features & User Stories
-* **Instruction:** Organize your requirements by Feature. For each feature, write the underlying requirements as User Stories and link them to your GitHub Issues.
 
-#### 3.2.1 Feature: [Insert Feature Name, e.g., Patient Registration]
-*   **Description:** [Briefly describe the feature].
-*   **Priority:** [High / Medium / Low].
+#### 3.2.1 Feature: Sample Intake and Tracking
+*   **Description:** This feature enables the laboratory to receive new samples and track their progress through various internal stages.
+*   **Priority:** High.
 *   **User Stories:**
-    *   **Story 1:** As a [User Role], I want to [Action/Goal] so that [Benefit/Value]. 
-        * *Acceptance Criteria:* [List what must be true for this to be considered 'Done'].
+    *   **Story 1:** As a Lab Technician, I want to register a new sample entry so that it can be assigned a unique ID for tracking.
+        * *Acceptance Criteria:*The system must generate a unique alphanumeric ID for every new sample.
+​The technician should be able to input basic sample details (Type, Patient ID, Source).
+​A confirmation message must appear once the registration is successful..
         * *GitHub Issue:* [Link to Issue, e.g., #12]
-    *   **Story 2:** As a [User Role], I want to [Action/Goal] so that [Benefit/Value].
-        * *Acceptance Criteria:* [List criteria].
+    *   **Story 2:** As a Lab Technician, I want to update the sample status in real-time so that the integration team can see the current processing stage.
         * *GitHub Issue:* [Link to Issue, e.g., #13]
-
-#### 3.2.2 Feature: [Insert Feature Name]
-*   [Repeat the structure above for all module features].
-
+          
+       **Story 3:** As a Lab Technician, I want to scan a sample's barcode to instantly retrieve its data and current status.
+#### 3.2.2 Feature:Secure Results Management and API Integration
+​Description: Provides a secure way to input raw test results and reference ranges, exposing them to external modules through a protected API without generating reports.
+​Priority: High.
+​User Stories: 
+​Story 1: As a Lab Technician, I want the system to lock a record while I am editing results to prevent data conflicts from other users.
+​Story 2: As an Integration Developer (Module 7), I want to fetch structured JSON data for "Ready for Approval" samples to complete the clinical diagnostic cycle.
+​Story 3 : As a Lab Technician, I want to verify material availability from Module 3 before starting a test to ensure the analysis can be completed without interruption.
+​Story 4 : As a System Administrator, I want to block result approval if the payment status from Module 5 is "Unpaid" to ensure financial compliance.
+#### 3.2.3 Feature: Laboratory Data Integrity
+​Description: Ensuring that raw results and reference ranges are stored accurately and locked during editing.
+​Priority: High.
+​User Stories: 
+​Story 1: As a Lab Technician, I want the system to lock a record while I am editing it so that no other technician can overwrite my data.
+​Story 2: As a System Administrator, I want to track the exact time each result was entered for auditing purposes.
+#### 3.2.4 Feature : Automated Audit Logging
+​Description: Automatically records every action taken on a sample, including timestamps and the identity of the technician.
+​Priority: Medium.
+​User Stories: 
+​Story 1: As a System Administrator, I want to view the automated time-tracking logs for any sample to audit the laboratory's performance and efficiency.
 ### 3.3 Performance Requirements
-* **Instruction:** Specify quantitative limits. (e.g., "The module must return query results in under 2 seconds for up to 50 concurrent users").
+​Response Time: The system shall respond to API requests for sample data within less than 2 seconds under normal load.
+​Concurrency: The module must support at least 20 concurrent lab technicians updating sample results simultaneously without performance degradation.
+​Throughput: The system should be capable of processing and logging up to 500 new sample entries per day.
 
 ### 3.4 Logical Database Requirements
-* **Instruction:** Describe the data entities managed by your module. If you are using a shared database, specify which tables your team is responsible for. (Include ERD models in the Appendix).
-
+​Data Entities: The module is responsible for managing the Samples and LabResults entities.
+​Key Tables: 
+​Samples Table: Stores unique sample IDs, registration timestamps, and current status.
+​Results Table: Stores raw test values, reference ranges, and the associated technician’s ID, linked to the Samples table.
+​Integrity: Use of PostgreSQL foreign keys to ensure all results are linked to a valid, existing sample record
 ### 3.5 Software System Attributes
-* **Instruction:** Define the Non-Functional Requirements (NFRs) for your module:
-  * **Reliability:** [Acceptable failure rates].
-  * **Security:** [Authentication methods, data encryption protocols].
-  * **Maintainability & Portability:** [Coding standards, documentation rules].
-
+   **Reliability:** The system shall maintain an uptime of 99.5% during laboratory working hours, with an acceptable failure rate of less than 1% for data entry transactions.
+   **Security:** Authentication: Access to the API and dashboard is restricted to authorized personnel using secure JWT (JSON Web Tokens).
+​Encryption: All medical data in transit must be encrypted using HTTPS/TLS protocols.
+  * **Maintainability & Portability:** Coding Standards: The back-end is developed using JavaScript with clear documentation for all API endpoints to facilitate future updates.
+​Portability: The system is containerized to ensure it can be easily deployed across different server environments (Windows/Linux).
+**Auditability:** The system must record the User ID and Timestamp for every stage transition to identify the personnel responsible for any delays.
+​**Workflow Integrity**: The system shall enforce a sequential workflow, preventing a sample from moving to a new stage unless the previous one is fully documented.
+​**Interoperability**: The module must support seamless JSON data exchange with Modules 3, 5, and 7 to maintain real-time tracking accuracy.
 ---
 
 ## 4. Appendices
 ### Appendix A: Glossary & Models
-* **Instruction:** Include any Data Flow Diagrams (DFDs), Entity-Relationship Diagrams (ERDs), or detailed UI Mockups here.
-
+Glossary: 
+​JWT: JSON Web Token, used for secure authentication.
+​Reference Range: The normal range of values for a specific medical test.
+​Models: (You should include your Entity-Relationship Diagram (ERD) and Data Flow Diagrams (DFDs) here as instructed in the image).
 ### Appendix B: GitHub Traceability Checklist
 * **Instruction for Team Members:** Before submitting this SRS, ensure that:
   * [ ] Every User Story in Section 3.2 has a corresponding GitHub Issue.
