@@ -118,16 +118,16 @@ Data Exchange: A structured JSON output containing raw results, reference ranges
 ### 3.2 System Features & User Stories
 
 #### 3.2.1 Feature: Sample Intake and Tracking
-*   **Description:** This feature enables the laboratory to receive new samples and track their progress through various internal stages.
-*   **Priority:** High.
-*   **User Stories:**
-    *   **Story 1:** As a Lab Technician, I want to register a new sample entry so that it can be assigned a unique ID for tracking.
-        * *Acceptance Criteria:*The system must generate a unique alphanumeric ID for every new sample.
-​The technician should be able to input basic sample details (Type, Patient ID, Source).
-​A confirmation message must appear once the registration is successful..
+   **Description:** This feature enables the laboratory to receive new samples and track their progress through various internal stages.
+  **Priority:** High.
+  **User Stories:**
+      **Story 1:** As a Lab Technician, I want to register a new sample entry so that it can start tracking
+         *Acceptance Criteria:*The system must receive and validate the unique alphanumeric ID from Module 1.
+          The system must record the reception timestamp.
+​
         * *GitHub Issue:* [Link to Issue, e.g., #12]
     *   **Story 2:** As a Lab Technician, I want to update the sample status in real-time so that the integration team can see the current processing stage.
-        * *GitHub Issue:* [Link to Issue, e.g., #13]
+         *GitHub Issue:* [Link to Issue, e.g., #13]
           
        **Story 3:** As a Lab Technician, I want to scan a sample's barcode to instantly retrieve its data and current status.
 #### 3.2.2 Feature:Secure Results Management and API Integration
