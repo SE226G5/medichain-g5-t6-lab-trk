@@ -18,7 +18,7 @@ Provide a brief description of what this module does based on the project text. 
 | **Student 2** | Requirements & Analysis | Functional Requirements, Use Case Diagrams | [Link] |
 | **Student 3** | Process Modeling | Activity Diagrams, Business Rules Validation | [Link] |
 | **Student 4** | Data Design | ERD, Database Schema, Class Diagrams | [Link] |
-| **Student 5 (Optional)** | Interaction Design | Sequence Diagrams, Logic Flow | [Link] |
+| **Fatima Elwan** | Interaction Design | Sequence Diagrams, Logic Flow | [Fatima](https://github.com) |
 | **Student 6 (Optional)** | UI/UX & Frontend | Wireframes, Interface Logic, User Stories | [Link] |
 
 ---
