@@ -117,7 +117,7 @@ Data Exchange: A structured JSON output containing raw results, reference ranges
 }
 
 3.2 System Features & User Stories
-​3.2.1 Feature: Sample Intake and Tracking
+#​3.2.1 Feature: Sample Intake and Tracking
 ​Description: This feature enables the laboratory to receive new samples and track their progress through various internal stages using precise time-tracking and documentation.
 Priority: High.
 ​Story 1: Sample Registration
