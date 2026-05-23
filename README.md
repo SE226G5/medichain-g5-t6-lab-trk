@@ -41,8 +41,7 @@ Provide a brief description of what this module does based on the project text. 
 - [ ] **Dynamic Modeling:** Sequence Diagrams for core processes.
 - [ ] **Interface Design:** Low-fidelity Wireframes.
 
----
-itions if the status returns Unpaid.
+
 
 ---
 ## 🛠 Tools Used
