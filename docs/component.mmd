@@ -1,0 +1,57 @@
+flowchart TB
+    subgraph External["External Modules"]
+        M1["Module 1<br/>(Sample Registration)<br/>«interface»<br/>ISampleRegistrationData<br/>- getSampleCode()<br/>- getCollectionTimestamp()<br/>- getTestType()"]
+        
+        M3["Module 3<br/>(Inventory Validation)<br/>«interface»<br/>IInventoryAvailability<br/>- isMaterialAvailable()<br/>- isMaterialValid()"]
+        
+        M5["Module 5<br/>(Billing & Payment)<br/>«interface»<br/>IPaymentStatus<br/>- getPaymentStatus()<br/>→ paid/pending/failed"]
+        
+        M7["Module 7<br/>(Medical Approval)<br/>«interface»<br/>IReadyForApproval<br/>- GET /api/v1/samples/ready-for-approval<br/>→ returns ready samples JSON"]
+        
+    end
+
+    subgraph Module6["Module 6: LAB-TRK"]
+        Core["LAB-TRK Core<br/>(Sample Lifecycle Manager)<br/>- StageTransition()<br/>- ValidatePreviousStage()<br/>- GenerateTimestamp()<br/>- CalculateDuration()"]
+        
+        Validator["Workflow & Stage Validator<br/>(يمنع الانتقال بدون توثيق المرحلة السابقة)"]
+        
+        TimeTracker["Time Tracking &<br/>Duration Calculator"]
+        
+        DelayMonitor["Delay Monitor &<br/>Alert Dispatcher<br/>إصدار تنبيه عند التأخير<br/>تحديد المرحلة المسؤولة"]
+        
+        APILayer["External Integration API<br/>واجهات التواصل مع الموديلات الأخرى"]
+        
+        DBLayer["Database Access Layer<br/>- samples table<br/>- sample_stages table<br/>- stage_timings table<br/>- delay_alerts table"]
+        
+        Core --> Validator
+        Core --> TimeTracker
+        Core --> DBLayer
+        Validator --> DelayMonitor
+        TimeTracker --> DelayMonitor
+        DelayMonitor --> DBLayer
+        Core --> APILayer
+    end
+
+    DB[(PostgreSQL Database)]
+
+    %% العلاقات من External إلى Module 6
+    M1 -->|"Sample ID, Barcode, Collection Timestamp"| Core
+    APILayer -->|"تستهلك"| M3
+    APILayer -->|"تستهلك"| M5
+    APILayer -.->|"تقدم (يستهلكها Module 7)"| M7
+
+    %% اتصال قاعدة البيانات
+    DBLayer --> DB
+
+    %% تنسيقات الألوان
+    classDef modStyle fill:#ff,stroke:#1a73e8,stroke-width:2px
+    classDef coreStyle fill:#ff,stroke:#0d47a1,stroke-width:3px,color:#fff
+    classDef subStyle fill:#f5,stroke:#333,stroke-width:1px
+    classDef dbStyle fill:#f5,stroke:#4caf50,stroke-width:2px
+    classDef apiStyle fill:#f5,stroke:#ff9800,stroke-width:2px
+
+    class M1,M3,M5,M7,M4 modStyle
+    class Core coreStyle
+    class Validator,TimeTracker,DelayMonitor,DBLayer subStyle
+    class DB dbStyle
+    class APILayer apiStyle
