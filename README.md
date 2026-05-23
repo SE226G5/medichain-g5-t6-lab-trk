@@ -22,7 +22,18 @@ Provide a brief description of what this module does based on the project text. 
 | **Student 6 (Optional)** |  Frontend | Wireframes, Interface Logic, User Stories |https://github.com/mariamabdulmawla/|
 
 ---
+## 🔗 Integration Points
 
+*How this module communicates with others:*
+
+* Inbound (Data received from other modules):
+    * Module 1 (LAB-REG): Receives initial sample data and unique tracking IDs upon registration to initialize the workflow tracking log.
+    * Module 4 (REF-TRK): Receives dynamic external referral and barcode scanning requests to stream real-time sample stage updates to the external physicians' portal.
+    * Module 7 (MED-APP): Receives medical approval status and final locks (isLocked: true), closing the sample journey and embedding the unmodifiable final report URL.
+
+* Outbound (Data sent to other modules):
+    * Module 3 (INV-VAL): Sends a validation request (POST /api/v1/inventory/validate-feasibility) to verify chemical availability and feasibility before advancing to the analysis phase.
+    * Module 5 (REV-BIL): Sends a synchronous billing check (GET /api/v1/billing/check-status/:sampleId) to strictly block result entry or stage transitions if the status returns Unpaid.
 ## 🚀 Analysis & Design Progress
 - [ ] **Requirement Elicitation:** Completed list of FRs/NFRs.
 - [ ] **UML Behavioral Diagrams:** Use Case and Activity Diagrams.
@@ -31,11 +42,7 @@ Provide a brief description of what this module does based on the project text. 
 - [ ] **Interface Design:** Low-fidelity Wireframes.
 
 ---
-
-## 🔗 Integration Points
-*How this module communicates with others:*
-* **Inbound:** Data received from [Module Name].
-* **Outbound:** Data sent to [Module Name].
+itions if the status returns Unpaid.
 
 ---
 ## 🛠 Tools Used
