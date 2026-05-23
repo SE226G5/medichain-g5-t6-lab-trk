@@ -88,14 +88,16 @@ Data Exchange: A structured JSON output containing raw results, reference ranges
 ### 3.1 External Interface Requirements
 * **Instruction:** Sample Status & Lifecycle Management
 ​These endpoints handle the tracking and progression of medical samples.
-​PATCH /api/v1/samples/:id/status: Updates the current status of a sample (e.g., from "Pending" to "In Progress").
-​POST /api/v1/samples/ready-for-apprval: The primary integration point that notifies external modules (like Module 7) that the sample has finished laboratory review and is "Ready for Approval".
-​GET /api/v1/samples/:id/history: Retrieves the audit trail and automated time-tracking logs for a specific sample's lifecycle.
+​POST /api/v1/samples/register: Updates the current status of a sample (e.g., from "Pending" to "In Progress").
+​POST /api/v1/medical/result/apprve: The primary integration point that notifies external modules (like Module 7) that the sample has finished laboratory review and is "Ready for Approval".
+​GET /api/v1/medical/results/modification-request: Special approval pathway to modify a locked result with mandatory recording of modification justifications.
+POST/api/v1/billing/invoices:Create a new invoice based on patient type (Employee, Insurance, Cash).
+GET/api/v1/billing/check-status/:sampleId:Called by the "Approval & Result Locking" module to verify whether the sample is paid or insurance-covered, in order to allow result entry.
 ​2. Laboratory Results & Data Exchange
 ​These endpoints manage the raw medical data requested by the integration teams.
-​POST /api/v1/samples/:id/results: Allows lab technicians to submit raw test results, reference ranges, and technician identification.
-​GET /api/v1/samples/:id/results: Provides the structured JSON data (Raw Results, Reference Values, and Technician Name) to authorized external modules.
-​PUT /api/v1/samples/:id/results: Used for editing existing results; this endpoint triggers the Record Locking mechanism to prevent concurrent modification errors.
+​POST /api/v1/inventory/validate-feasibility:Check the availability and validity of chemical materials before starting the analysis.
+
+​PUT /api/v1/invevtory/deduct-materials: Automatic deduction of chemical materials from inventory (Inventory_Item) upon test execution.
 ​3. Administrative & System Monitoring
 ​Endpoints for system-wide visibility and technician management.
 ​GET /api/v1/samples: Returns a comprehensive list of all samples currently in the system and their real-time statuses.
