@@ -134,7 +134,6 @@ GET/api/v1/billing/check-status/:sampleId:Called by the "Approval & Result Locki
     * **As a** Lab Technician,
     * **I want to** update the sample status in real-time,
     * **So that** the integration team can see the current processing stage.
-    * ***Acceptance Criteria:*** When the technician updates the status, the system must automatically enforce Stage Documentation and Calculate Stage Time. If the calculated time exceeds predefined limits, the system triggers Issue Alerts.
     * **GitHub Issue:** #3
 
 * **Story 3: Barcode Scanning**
@@ -151,7 +150,6 @@ GET/api/v1/billing/check-status/:sampleId:Called by the "Approval & Result Locki
     * **As a** Lab Technician,
     * **I want to** input raw laboratory test results and reference ranges into the system,
     * **So that** the medical data is securely stored.
-    * ***Acceptance Criteria:*** The system must automatically enforce Record Locking while the technician is editing or entering results to prevent data conflicts from other users.
     * **GitHub Issue:** #4
 
 * **Story 2: Data Exchange for External Approval**
