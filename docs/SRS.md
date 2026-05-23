@@ -142,7 +142,7 @@ GET/api/v1/billing/check-status/:sampleId:Called by the "Approval & Result Locki
     * **As a** Lab Technician,
     * **I want to** scan a sample's barcode,
     * **So that** I can instantly retrieve its data and current status.
-    * **GitHub Issue:** #3
+    * **GitHub Issue:** #6
 
 #### 3.2.2 Feature: Secure Results Management and API Integration
 **Description:** Provides a secure way to input raw test results and reference ranges, exposing them to external modules through a protected API while maintaining local data integrity.
