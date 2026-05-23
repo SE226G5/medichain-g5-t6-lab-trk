@@ -193,26 +193,18 @@ Priority: Medium.
     * As a Lab Technician,
     * I want to log each stage transition of a sample sequentially,
     * So that the sample lifecycle is fully documented and no forward step can be taken without its previous validation.
-    * Acceptance Criteria:
-        * The system must validate and record the transition only if the preceding stage is strictly verified.
-        * Every logged transition must automatically secure the technician's ID and an automatic timestamp.
     * GitHub Issue: #5
 
 * Story 2: Processing Time Tracking
     * As a Lab Quality Supervisor,
     * I want to view the exact time spent on each processing stage for any sample,
     * So that I can monitor the efficiency of our laboratory workflow and audit processes.
-    * Acceptance Criteria:
-        * The system must display the calculated elapsed time (in minutes) between consecutive stages.
     * GitHub Issue: #5
 
 * Story 3: Delay Alerting & Bottleneck Identification
     * As a Lab Manager,
     * I want to receive immediate alerts when a sample exceeds its allowed time limit, specifying the exact stage causing the delay,
     * So that I can take instant corrective actions and hold the delayed department accountable.
-    * Acceptance Criteria:
-        * The system must trigger a visual alert or flag if the stage duration exceeds the predefined threshold.
-        * The alert must explicitly tag the specific stage where the delay occurred.
     * GitHub Issue: #10
 ### 3.3 Performance Requirements
 ​Response Time: The system shall respond to API requests for sample data within less than 2 seconds under normal load.
