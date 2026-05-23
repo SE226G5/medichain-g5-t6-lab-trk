@@ -162,14 +162,14 @@ GET/api/v1/billing/check-status/:sampleId:Called by the "Approval & Result Locki
     * **As a** Lab Technician,
     * **I want to** verify material availability from Module 3 before starting a test,
     * **So that** I can ensure the analysis can be completed without interruption.
-    * **GitHub Issue:** #5
+    * **GitHub Issue:** #3
 
 * **Story 4: Financial Compliance Verification**
     * **As a**  Lab Financial Auditor, (Accountant)
     * **I want to** ensure the system restricts test approvals for unpaid balances,
     * **So that** no financial losses occur before the final release.
 se.
-    * **GitHub Issue:** #5
+    * **GitHub Issue:** #3
 #### 3.2.3 Feature: Laboratory Data Integrity
 Description: Ensuring that raw results and validation sequences maintain strict consistency and architectural integrity.
 Priority: High.
