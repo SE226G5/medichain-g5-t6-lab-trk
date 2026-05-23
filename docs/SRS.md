@@ -128,7 +128,6 @@ GET/api/v1/billing/check-status/:sampleId:Called by the "Approval & Result Locki
     * **As a** Lab Technician,
     * **I want to** register a new sample entry,
     * **So that** its tracking lifecycle can begin in the system.
-    * ***Acceptance Criteria:*** The system must receive and validate the unique alphanumeric ID from Module 1, record the reception timestamp, and automatically trigger the Record Receipt Time workflow.
     * **GitHub Issue:** #2
 
 * **Story 2: Real-Time Status Updates**
