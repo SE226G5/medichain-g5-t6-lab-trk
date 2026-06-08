@@ -1,5 +1,4 @@
 namespace AlertManagerLib;
-
 public class AlertManager
 {
     public string GetAlertResponsibility(string stageName)
